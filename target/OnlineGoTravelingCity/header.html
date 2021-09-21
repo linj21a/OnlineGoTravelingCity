@@ -1,0 +1,127 @@
+<!-- 头部 start -->
+<script src="js/jquery-1.11.0.min.js">
+</script>
+<script src="js/getParameter.js"></script>
+<script>
+/*
+//两种方法设置disabled属性
+$('#areaSelect').attr("disabled",true);
+$('#areaSelect').attr("disabled","disabled");
+
+//三种方法移除disabled属性
+$('#areaSelect').attr("disabled",false);
+$('#areaSelect').removeAttr("disabled");
+$('#areaSelect').attr("disabled","");
+
+*/
+$(function (){
+    $.get("user/findUser",{},function (data){
+        //需要清空缓存
+
+        if(!(data===""||data.length===0)){
+            $("#login").removeAttr("href");
+            $('#login').attr("disabled","disabled");
+            // $('#login').css("pointer-events","none");
+            $('#login').css("pointer-events","none");
+            $("#message").html("欢迎您，"+data.name);
+            //退出按钮可用
+            $("#exit").href = "user/exitUser";
+            $('#exit').attr("disabled","false");
+            $('#exit').css("pointer-events","auto");
+        }else{
+            $("#login").href = "login.html";
+            $('#login').attr("disabled","false");
+            $('#login').css("pointer-events","auto");
+            //退出按钮不可用
+            $("#exit").removeAttr("href");
+            $('#exit').attr("disabled","true");
+            $('#exit').css("pointer-events","none");
+
+        }
+    })
+    //查询分类数据
+    $.get("category/findAllCategory",{},function (data) {
+        //[{cid:1,cname:国内游},{},{}]
+        var lis = '<li class="nav-active"><a href="index.html">首页</a></li>';
+        //遍历数组,拼接字符串(<li>)
+        for (var i = 0; i < data.length; i++) {
+            //双引号看着普通字符串，因为外层有单引号
+            var li = '<li><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>';
+            lis += li;
+        }
+        //拼接收藏排行榜的li,<li><a href="favoriterank.html">收藏排行榜</a></li>
+
+        lis+= '<li><a href="favoriterank.html">收藏排行榜</a></li>';
+
+        //将lis字符串，设置到ul的html内容中
+        $("#category").html(lis);
+    });
+    //给搜索按钮绑定单击事件，获取搜索输入框的内容
+    $("#search_button").click(function () {
+        //线路名称
+        var rname = $("#search_input").val();
+
+        var cid = getParameter("cid");//封装了一个函数js文件，用于获取url里面的一个关键参数的值。
+        // 跳转路径 http://localhost:8080/OnlineGoTravelingCity_war_exploded/route_list.html?cid=5，拼接上rname=xxx
+        location.href= "http://localhost:8080/OnlineGoTravelingCity_war_exploded/route_list.html?cid="+cid+"&rname="+rname;
+    });
+});
+</script>
+    <header id="header">
+<!--        最顶部可以用来放广告牌-->
+<!--        <div class="top_banner">-->
+<!--            <img src="images/top_banner.jpg" alt="">-->
+<!--        </div>-->
+        <div class="shortcut">
+            <!-- 未登录状态  -->
+            <div class="login_out">
+<!--                此时需要禁用-->
+                <a href="login.html" id="login">登录</a>
+                <a href="register.html">注册</a>
+            </div>
+            <!-- 登录状态  -->
+            <div class="login">
+            	
+                <span id="message"></span>
+                <a href="myfavorite.html" class="collection">我的收藏</a>
+                <a href="user/exitUser" id="exit">退出</a>
+            </div>
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="/"><img src="images/logo2.png" alt="#"></a>
+                </div>
+                <div class="search">
+                    <input name="" id="search_input" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a href="javascript:;" id="search_button" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>
+                    <div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-800-8820</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul class="nav" id="category">
+<!--            <li class="nav-active"><a href="index.html">首页</a></li>-->
+<!--            <li><a href="route_list.html">门票</a></li>-->
+<!--            <li><a href="route_list.html">酒店</a></li>-->
+<!--            <li><a href="route_list.html">香港车票</a></li>-->
+<!--            <li><a href="route_list.html">出境游</a></li>-->
+<!--            <li><a href="route_list.html">国内游</a></li>-->
+<!--            <li><a href="route_list.html">港澳游</a></li>-->
+<!--            <li><a href="route_list.html">抱团定制</a></li>-->
+<!--            <li><a href="route_list.html">全球自由行</a></li>-->
+<!--            <li><a href="favoriterank.html">收藏排行榜</a></li>-->
+        </ul>
+    </div>
+    
